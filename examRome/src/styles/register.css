@@ -1,0 +1,39 @@
+.Main{
+    @apply  bg-bgColor h-screen max-[620px]:h-full max-[310px]:pl-1  min-[621px]:pl-10 pt-5 
+}
+.container{
+    @apply w-full
+}
+.content{
+    @apply  grid pt-5 max-[620px]:grid-cols-1 grid-cols-2  w-full 
+}
+.img{
+    @apply max-[620px]:w-screen;
+
+}
+.img img{
+    @apply w-full max-[620px]:h-4/5 h-[750px]  
+}
+.form{
+    @apply   w-full max-[620px]:max-w-md max-[620px]:px-2 max-w-xl  mx-auto;
+}
+.form form{
+    @apply bg-white px-8 pt-4 pb-8 mb-5 shadow-md;
+}
+.lb{
+    @apply mb-2
+}
+.lb label{
+    @apply min-[621px]:text-xl   text-opacity-90  font-poppins font-normal text-left 
+}
+.inp{
+    @apply min-[621px]:leading-[52px] w-full min-[621px]:text-xl  shadow border rounded appearance-none focus:outline-none py-2 px-3 focus:outline-blue-400
+}
+.err{
+    @apply text-center text-red-700 text-sm  italic
+}
+.btn{
+    @apply bg-primary text-xl  font-poppins font-normal w-full  mx-auto leading-[52px] 
+}    
+
+

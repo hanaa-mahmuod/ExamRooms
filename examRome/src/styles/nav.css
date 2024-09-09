@@ -1,0 +1,12 @@
+.Main{
+    @apply h-screen bg-white   
+}
+.list li{
+    @apply max-[550px]:mb-4 mb-10 leading-8 w-full text-xl  font-poppins font-normal text-gray-600 rounded-lg hover:cursor-pointer
+}
+.list li span{
+@apply ml-1
+}
+.list li:hover {
+    background-color: #FEC88799;
+}

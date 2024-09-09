@@ -1,0 +1,13 @@
+.noti-main {
+    @apply h-full min-[956px]:h-screen min-[956px]:flex-grow   w-screen 
+}
+.Noti_content{
+    @apply bg-bgColor h-full max-[955px]:w-screen overflow-hidden    relative
+}
+.Notifications{
+    @apply h-[50%] overflow-scroll 
+}
+.slice{
+    @apply mb-1 bg-['#F1F1F1'] w-full   h-28 py-3 border-b shadow-sm;
+}
+

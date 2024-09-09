@@ -1,0 +1,31 @@
+.prof-main{
+    @apply h-full min-[956px]:flex-grow  w-screen   
+}
+
+.edit-content{
+    @apply bg-bgColor pb-32  min-[956px]:h-full max-[955px]:w-screen   relative 
+
+}
+.from{
+    @apply  pt-16 pl-4 max-[500px]:w-full  ;
+}
+.from .frm{
+    @apply   w-full   ;
+}
+.lb{
+    @apply mb-2
+}
+.from .lb label{
+    @apply min-[621px]:text-xl  block text-black text-opacity-90  font-poppins font-normal text-left 
+}
+.inp{
+    @apply min-[621px]:leading-[52px] w-full min-[621px]:text-xl  shadow border rounded-lg appearance-none focus:outline-none py-2 px-3 focus:outline-blue-400
+}
+.err{
+    @apply text-center text-red-700 text-sm   font-poppins font-light
+}
+.but{
+    @apply rounded-lg text-xl  font-poppins font-light    mr-4  px-5 leading-[40px] 
+}    
+
+
