@@ -1,9 +1,12 @@
 import "../../styles/register.css";
 import Logo from "../../assets/examRooms_logo.png";
 import sign from"../../assets/signup_img.png"
+import {Toast} from"../../Sweetalert"
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
+    const navigate =useNavigate()
     const formik=useFormik({
         initialValues:{
             firstName:"",
@@ -28,15 +31,66 @@ const Register = () => {
             .required("phoneNumber is requierd")
             .min(11,"Must not be less than 11 number"),
             password:Yup.string()
-            .min(6,"Must not be less than 6 char")
-            .required("Password is requierd"),
+            .min(8,"Must not be less than 6 char")
+            .required("Password is requierd")
+            .matches(/[a-zA-Z]/, "Password must contain letters")
+            .matches(/[0-9]/, "Password must contain numbers")
+            .matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, "Password must contain special characters"),
             confirmPassword:Yup.string()
             .required("Confirm password require")
             .oneOf([Yup.ref("password"),""],"Password confirmation must match password")
         }),
-        onSubmit:(values)=>{
-            console.log("supmited form")
-            console.log({values});
+        onSubmit:async(values)=>{
+            try{
+                const response =await fetch("http://localhost:5000/api/Registration",{
+                    method:"Post",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        userFName:values.firstName,
+                        userLName:values.lastName,
+                        userEmail:values.email,
+                        userPhone:values.phonNumber,
+                        userPassword:values.password,
+                        userConfPassword:values.confirmPassword
+                    })
+                });
+                if(response.status===200){
+                    const data = await response.json();
+                    Toast.fire({
+                        icon: "success",
+                        title: " registreation Success ",
+                        text:{data}
+                    });
+
+                    navigate("/login");
+                }
+                else{
+                    const errorData = await response.json();
+                    if (response.status === 409) {
+                        // Handle conflict error (email already exists)
+                        formik.setErrors({
+                            email: errorData.message
+                        });
+                        Toast.fire({
+                            icon: "error",
+                            title: " registration failed ",
+                            text:errorData.message
+                            
+                        });
+                    } else{
+                    Toast.fire({
+                        icon: "error",
+                        title: " registration failed ",
+                        
+                    });}
+                    console.error("Registration failed:", errorData);
+                }
+            }
+            catch(err){
+                console.log(err)
+            }
         }
     })
 

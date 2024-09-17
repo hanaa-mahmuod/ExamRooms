@@ -28,9 +28,10 @@ const Navbar =()=>{
             <div className="icons max-[550px]:mt-10 mt-16">
                 <ul className="list">
                 <li>
-                
+                <Link to="home">
                     <HomeOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
                     <span>Home</span>
+                </Link>
                 
                 </li>
                 <li>
@@ -45,10 +46,10 @@ const Navbar =()=>{
                     
                 </li>
                 <li>
-                <Link to="exam-room">
+                <Link to="folders">
                 
                     <MeetingRoomOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
-                    <span>Exam Room</span>
+                    <span>Folders</span>
                 </Link>
                 </li>
                 <li>

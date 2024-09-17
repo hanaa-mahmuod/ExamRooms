@@ -4,17 +4,17 @@ export default function Session() {
   return (
     <>
     <div className='bg-[#F6F2EB] lg:px-[200px] '>
-    <div classname="bg-beige lg:mx-[200px]  flex justify-center items-center p-10">
+    <div className="bg-beige lg:mx-[200px]  flex justify-center items-center p-10">
   <div className=" w-full p-8 rounded-lg  space-y-6">
     
     <div className="flex justify-between items-center">
      <div className='flex'> <button className="rounded-full px-2 border-2 border-black p-1">
-      <span><i class="fa-solid fa-arrow-left"></i></span>
+      {/* <span><i class="fa-solid fa-arrow-left"></i></span> */}
       </button>
       <h1 className="text-lg font-semibold ms-3">session4</h1></div>
       <div className="flex items-center">
         <button className="mr-4">
-        <i class="fa-regular fa-bell text-[20px]"></i>
+        {/* <i class="fa-regular fa-bell text-[20px]"></i> */}
         </button>
         <img src="avatar.jpg" alt="Profile" className="w-8 h-8 rounded-full" />
       </div>
@@ -51,22 +51,22 @@ export default function Session() {
       <div className="flex space-x-4 items-center">
         <span>• Observers</span>
         <button className="rounded-full bg-yellow-500 p-2 px-3">
-        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        {/* <i class="fa-solid fa-arrow-up-from-bracket"></i> */}
         </button>
       </div>
       
       <div className="flex  space-x-4 items-center">
         <span>• Examiners</span>
         <button className="rounded-full bg-yellow-500 p-2 px-3">
-        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+        {/* <i class="fa-solid fa-arrow-up-from-bracket"></i> */}
         </button>
       </div>
     </div>
   
     <div className="flex items-center mt-6 space-x-4 lg:translate-x-[800px] ">
-      <button className="bg-yellow-500 px-4 py-2 rounded-lg text-white"><i class="fa-regular fa-pen-to-square me-1"></i>Edit</button>
-      <button className="bg-yellow-500 px-4 py-2 rounded-lg text-white"><i class="fa-regular fa-floppy-disk me-1"></i>Save</button>
-      <button className="bg-red-500 px-4 py-2 rounded-lg text-white"><i class="fa-solid fa-ban me-1"></i>Cancel</button>
+      {/* <button className="bg-yellow-500 px-4 py-2 rounded-lg text-white"><i class="fa-regular fa-pen-to-square me-1"></i>Edit</button> */}
+      {/* <button className="bg-yellow-500 px-4 py-2 rounded-lg text-white"><i class="fa-regular fa-floppy-disk me-1"></i>Save</button> */}
+      {/* <button className="bg-red-500 px-4 py-2 rounded-lg text-white"><i class="fa-solid fa-ban me-1"></i>Cancel</button> */}
     </div>
   </div></div>
     </div>

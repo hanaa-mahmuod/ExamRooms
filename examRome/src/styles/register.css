@@ -30,7 +30,7 @@
     @apply min-[621px]:leading-[52px] w-full min-[621px]:text-xl  shadow border rounded appearance-none focus:outline-none py-2 px-3 focus:outline-blue-400
 }
 .err{
-    @apply text-center text-red-700 text-sm  italic
+    @apply text-center text-red-900 text-sm  italic
 }
 .btn{
     @apply bg-primary text-xl  font-poppins font-normal w-full  mx-auto leading-[52px] 
