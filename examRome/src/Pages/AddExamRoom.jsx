@@ -161,8 +161,4 @@ const AddExamRoom = () => {
   );
 };
 
-<<<<<<< HEAD
 export default AddExamRoom;
-=======
-export default AddExamRoom;
->>>>>>> 657e6777a99d405997b3d147af5e10174787c1c8

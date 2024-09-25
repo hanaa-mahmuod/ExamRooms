@@ -33,9 +33,7 @@ const handelDelete =async()=>{
             headers:{
             'Content-Type':'application/json',
             "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMTEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtYWhtdWRuYWdpQGdtYWlsLmNvbSIsImV4cCI6MTcyNzI2NTUyMywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo3MjkwLyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzI5MCJ9.BdgJCBUQV8eO-nqYNW5WdRt3PhPEoTFFpwUFb_lJOQc"
-
             }
-
         });
         if(response.ok){
             navigate(-1);
@@ -45,7 +43,6 @@ const handelDelete =async()=>{
             title: 'Failed to delete Folder',
             })
         }
-
         }catch(error){
         console.log(error);
         }
@@ -58,10 +55,8 @@ useEffect(() => {
             console.error('Error fetching folders:', error);
         }
     };
-
     fetchData();
 }, [dispatch, params.folderId]);
-
 const goBack = () => {
     navigate(-1); // إرجاع المستخدم خطوة للوراء
 };
@@ -91,7 +86,6 @@ const goBack = () => {
                         <span className=" max-[500px]:ml-2 ml-7  max-[500px]:text-xl text-2xl  font-poppins font-light">General</span> 
                         <div className="inline-block  max-[500px]:ml-2 ml-4 "><ChevronLeftIcon   style={{ color: 'black', fontSize: 40 }} /></div>
                         <span className=" max-[500px]:text-xl max-[500px]:ml-2 ml-7 text-2xl font-poppins font-light ">{folderDetails.folder.folderName}</span> 
-
                     </span>
                 </div>
                     <div className=" folder_icons max-[520px]:mx-auto max-[520px]:block  ">
@@ -157,9 +151,4 @@ const goBack = () => {
         </div>
     );
 }
-
-<<<<<<< HEAD
 export default FolderDetails;
-=======
-export default FolderDetails;
->>>>>>> 657e6777a99d405997b3d147af5e10174787c1c8

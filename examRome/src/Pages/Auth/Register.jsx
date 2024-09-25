@@ -43,19 +43,11 @@ const Register = () => {
             .oneOf([Yup.ref("password"),""],"Password confirmation must match password")
         }),
         onSubmit:async(values)=>{
-<<<<<<< HEAD
             try{
                 const response =await fetch("https://localhost:7290/api/Registration",{
                     method:"Post",
                     headers:{
                         "Content-Type":"application/json"
-=======
-                try {
-                    const response = await fetch("https://localhost:5001/api/Registration", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
->>>>>>> 657e6777a99d405997b3d147af5e10174787c1c8
                     },
                     body: JSON.stringify({
                         userFName: values.firstName,
@@ -65,19 +57,10 @@ const Register = () => {
                         userPassword: values.password,
                         userConfPassword: values.confirmPassword
                     })
-<<<<<<< HEAD
                 });
                 if(response.ok){
                  
                     const data = await response.json();
-=======
-                    });
-                
-                    const responseData = await response.json();
-                
-                    if (response.ok) {
-                    // إذا كانت الاستجابة ناجحة
->>>>>>> 657e6777a99d405997b3d147af5e10174787c1c8
                     Toast.fire({
                         icon: "success",
                         title: "Registration Success",
