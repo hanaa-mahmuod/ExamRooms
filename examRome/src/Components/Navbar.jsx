@@ -79,8 +79,10 @@ useEffect(() => {
                 </Link>
                 </li>
                 <li>
+                    <Link to="notes">
                     <NotesOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
                     <span>Notes</span>
+                    </Link>
                 </li>
                 <li>
                     <ChatOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />

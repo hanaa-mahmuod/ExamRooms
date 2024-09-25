@@ -2,37 +2,37 @@
     @apply h-full min-[956px]:h-screen min-[956px]:flex-grow  
 }
 .room_content{
-    @apply bg-bgColor h-full max-[955px]:w-screen   relative
+    @apply bg-bgColor h-full max-[955px]:w-screen max-[955px]:h-screen  relative
 }
 .folder_icons {
     @apply flex justify-around w-1/2
 }
-.sessions{
+.rooms{
     @apply h-[50%] overflow-scroll 
 }
-.session{
+.room{
     @apply mb-16 bg-white w-3/4  ml-10 h-44 py-3 rounded-3xl shadow-xl;
 }
-.session .Title_admin{
+.room .Title_admin{
     @apply max-[615px]:block flex justify-between 
 }
-.session .date_numstd{
+.room .date_numstd{
     @apply max-[615px]:block  flex justify-between max-[615px]:translate-y-4 min-[620px]:translate-y-20
 }
-.session .date_numstd .stdnum .num {
+.room .date_numstd .stdnum .num {
     @apply ml-5 
 
 }
-.session .date_numstd .date .day{
+.room .date_numstd .date .day{
     @apply mr-5 text-gray-800
 }
-.session .date_numstd .date .m-y-d{
+.room .date_numstd .date .m-y-d{
     @apply mr-5
 }
-.session .date_numstd .date span{
+.room .date_numstd .date span{
     @apply text-gray-400
 }
-.session .date_numstd .stdnum span {
+.room .date_numstd .stdnum span {
     @apply  text-gray-400
 
 }
