@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import folderReducer from "./reducers/folder"
+import folderSlice from "./reducers/folder"
+import folderDetailsSlice from "./reducers/folderDetails";
+import roomDetailsSlice from"./reducers/ExamRomeDetails"
 const store = configureStore({
   reducer: {
-    folders:folderReducer
+    folders:folderSlice,
+    folderDetails:folderDetailsSlice,
+    roomDetails:roomDetailsSlice
     // add your reducers here
   },
 })

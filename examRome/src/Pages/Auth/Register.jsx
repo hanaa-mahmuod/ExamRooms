@@ -41,57 +41,62 @@ const Register = () => {
             .oneOf([Yup.ref("password"),""],"Password confirmation must match password")
         }),
         onSubmit:async(values)=>{
-            try{
-                const response =await fetch("http://localhost:5000/api/Registration",{
-                    method:"Post",
-                    headers:{
-                        "Content-Type":"application/json"
+                try {
+                    const response = await fetch("https://localhost:5001/api/Registration", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
                     },
-                    body:JSON.stringify({
-                        userFName:values.firstName,
-                        userLName:values.lastName,
-                        userEmail:values.email,
-                        userPhone:values.phonNumber,
-                        userPassword:values.password,
-                        userConfPassword:values.confirmPassword
+                    body: JSON.stringify({
+                        userFName: values.firstName,
+                        userLName: values.lastName,
+                        userEmail: values.email,
+                        userPhone: values.phonNumber,
+                        userPassword: values.password,
+                        userConfPassword: values.confirmPassword
                     })
-                });
-                if(response.status===200){
-                    const data = await response.json();
+                    });
+                
+                    const responseData = await response.json();
+                
+                    if (response.ok) {
+                    // إذا كانت الاستجابة ناجحة
                     Toast.fire({
                         icon: "success",
-                        title: " registreation Success ",
-                        text:{data}
+                        title: "Registration Success",
+                        text: responseData.message
                     });
-
                     navigate("/login");
-                }
-                else{
-                    const errorData = await response.json();
+                    } else {
+                    // إذا كانت الاستجابة بها خطأ
                     if (response.status === 409) {
-                        // Handle conflict error (email already exists)
+                        // التعامل مع خطأ تعارض (البريد الإلكتروني موجود بالفعل)
                         formik.setErrors({
-                            email: errorData.message
+                        email: responseData.message
                         });
                         Toast.fire({
-                            icon: "error",
-                            title: " registration failed ",
-                            text:errorData.message
-                            
-                        });
-                    } else{
-                    Toast.fire({
                         icon: "error",
-                        title: " registration failed ",
-                        
-                    });}
-                    console.error("Registration failed:", errorData);
+                        title: "Registration Failed",
+                        text: responseData.message
+                        });
+                    } else {
+                        Toast.fire({
+                        icon: "error",
+                        title: "Registration Failed",
+                        text: responseData.message || "An error occurred during registration."
+                        });
+                    }
+                    console.error("RRRegistration failed:", responseData);
+                    }
+                } catch (err) {
+                    console.error("Network error:", err);
+                    Toast.fire({
+                    icon: "error",
+                    title: "Registration Failed",
+                    text: "Network error occurred. Please try again later."
+                    });
                 }
             }
-            catch(err){
-                console.log(err)
-            }
-        }
     })
 
     
