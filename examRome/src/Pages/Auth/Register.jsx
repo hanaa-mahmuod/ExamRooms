@@ -5,6 +5,8 @@ import {Toast} from"../../Sweetalert"
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import LogIn from './LogIn';
 const Register = () => {
     const navigate =useNavigate()
     const formik=useFormik({
@@ -42,7 +44,7 @@ const Register = () => {
         }),
         onSubmit:async(values)=>{
             try{
-                const response =await fetch("http://localhost:5000/api/Registration",{
+                const response =await fetch("https://localhost:7290/api/Registration",{
                     method:"Post",
                     headers:{
                         "Content-Type":"application/json"
@@ -56,7 +58,8 @@ const Register = () => {
                         userConfPassword:values.confirmPassword
                     })
                 });
-                if(response.status===200){
+                if(response.ok){
+                 
                     const data = await response.json();
                     Toast.fire({
                         icon: "success",
@@ -96,19 +99,19 @@ const Register = () => {
 
     
     return (
-        <div className="Main " >
+        <div className="Main bg-[#F6F2EB]  w-full  p-[50px]" >
         <div className="container">
-            <div className="Logo max-[620px]:pl-3 max-[620px]:mb-5 ">
-                <img src={Logo} alt="Not Found"/>
-            </div>
+        <div className=' flex justify-between items-center'>
+       <div ><img src={Logo}  alt="logoProject" /></div> 
+     <NavLink to='/Login'>  <div> <button class="text-black bg-[#febc6e] hover:bg-[#fda53b] focus:ring-4 focus:outline-none focus:ring-[#fda53b] font-medium rounded-lg text-sm w-full  px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button> </div></NavLink>
+   
+    </div>
             <div className="content">
-            <div className="img min-[621px]:hidden ">
-                    <img src={sign}/>
-                </div>
+          
                 <div className="buttom_left">
                 <h2 className="text-3xl  font-poppins font-normal text-center mb-5 ">Sgin up</h2>
-                <div className="form">
-                <form onSubmit={formik.handleSubmit}>
+                <div className="form bg-[#F6F2EB] ">
+                <form onSubmit={formik.handleSubmit} className="bg-[#F6F2EB] " >
                     <div className="flex">
                         <div className="lb ">
                             <label htmlFor="firstname">First Name</label>
@@ -189,7 +192,8 @@ const Register = () => {
                         />
                         {(formik.errors.confirmPassword && formik.touched.confirmPassword) && <div className="err">{formik.errors.confirmPassword}</div>}
                     </div>
-                    <button type="submit" className="btn">Sign up</button>
+                    <button type="submit" className="btn mb-5">Sign up</button>
+                    <div><h1>Do You Have Account? <NavLink to='/Login'><span className="font-bold text-[#FEC887]">Login Now!</span></NavLink></h1></div>
                 </form>
                 </div>
                 </div>

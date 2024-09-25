@@ -1,13 +1,70 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from '@mui/material/IconButton';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-
+import { useQuery } from '@tanstack/react-query';
 import admin from"../assets/admin.png"
 import "../styles/notifications.css"
 import TelegramIcon from '@mui/icons-material/Telegram';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import Loading from '../Components/Loading';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 const Notifications= () => {
+  const [status, setstatus] = useState(null)
+        function getAllNotification(){
+        return axios.get(`https://localhost:7290/api/Notifications/Notifications`,{ headers: {
+            'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+          }});
+    }
+    const {data,isError,isLoading}=useQuery({
+        queryKey: ['allNotification'],
+        queryFn:getAllNotification,
+    
+      });
+      if(isLoading){
+        return <Loading></Loading>
+     }
+     if(isError)
+     {console.log('error')
+        return<h1>errror</h1>
+     }
+     if(data){
+        console.log(data.data.$values[0].message)
+
+     }
+    async function handleAccepted(notifyID){
+       await axios.post(`https://localhost:7290/api/Notifications/AcceptInvite/${notifyID}`,{},{
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+        }
+      })
+       .then((res)=>{console.log('response',res)
+        toast.success(`${res.data.message}`)
+        setstatus('Accepted');
+       }
+    )
+       .catch((err)=>{console.log(err)
+        toast.error(`${err.message}`)
+       })
+     }
+    async function handleRejected(notifyID){
+       await axios.post(`https://localhost:7290/api/Notifications/RejectInvite/${notifyID}`,{},{
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+        }
+      })
+       .then((res)=>{console.log('response',res)
+        toast.success(`${res.data.message}`)
+        setstatus('Rejected');
+       }
+    )
+       .catch((err)=>{console.log(err)
+        toast.error(`${err.message}`)
+       })
+     }
     return (
         <div className="noti-main ">
             <div className="Noti_content pt-5 ">
@@ -25,90 +82,33 @@ const Notifications= () => {
                         <ArrowBackIcon />
                     </IconButton>
                     <span className="ml-4 translate-y-1.5  max-[500px]:text-2xl text-2xl font-poppins font-normal">
-                    Requests Status
+                  Notifications
                     </span>
                 </div>
                     
                 </div>
-                <div className="relative">
+                {/* <div className="relative">
                 <div className="buttn px-2  absolute right-10 bg-[#FEC887] flex text-xl  font-poppins font-normal  rounded-md justify-between w-40 py-4"><button className="">All</button> <span className="  border border-black rounded-full"><ArrowDropDownIcon style={{ fontSize: 20 }} /> </span> </div>
-                </div>
+                </div> */}
                 <div className="Notifications max-[955px]:mx-auto mt-20">
-                <div className="slice grid grid-cols-3 ">
-                    <div className="admin max-[499px]:pl-2 min-[500px]:pl-10 py-3 ">
-                        <img className="min-[500px]:inline w-16" src={admin} alt="Not found "/>
-                        <span className="text-center  font-poppins font-light  min-[500px]:ml-4 text-gray-400">Eman</span>
-                    </div>
-                    <div className="flex py-7 pr-8 justify-evenly col-span-2 ">
-                        <div className="ml-auto">
-                    <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <AutorenewIcon  className="text-gray-400" style={{ fontSize: 40 }} /> </span>
-                        </div>
-                        <div className="ml-auto" >
-                        <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <TelegramIcon className="text-gray-400" style={{ fontSize: 40 }} />  </span>
-                        </div>
-                    </div>
-
-                </div> 
-                <div className="slice grid grid-cols-3 ">
-                    <div className="admin max-[499px]:pl-2 min-[500px]:pl-10 py-3 ">
-                        <img className="min-[500px]:inline w-16" src={admin} alt="Not found "/>
-                        <span className="text-center  font-poppins font-light  min-[500px]:ml-4 text-gray-400">Eman</span>
-                    </div>
-                    <div className="flex py-7 pr-8 justify-evenly col-span-2 ">
-                        <div className="ml-auto">
-                    <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <AutorenewIcon  className="text-gray-400" style={{ fontSize: 40 }} /> </span>
-                        </div>
-                        <div className="ml-auto" >
-                        <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <TelegramIcon className="text-gray-400" style={{ fontSize: 40 }} />  </span>
-                        </div>
-                    </div>
-
-                </div> 
-                <div className="slice grid grid-cols-3 ">
-                    <div className="admin max-[499px]:pl-2 min-[500px]:pl-10 py-3 ">
-                        <img className="min-[500px]:inline w-16" src={admin} alt="Not found "/>
-                        <span className="text-center  min-[500px]:ml-4 text-gray-400">Eman</span>
-                    </div>
-                    <div className="flex py-7 pr-8 justify-evenly col-span-2 ">
-                        <div className="ml-auto">
-                    <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <AutorenewIcon  className="text-gray-400" style={{ fontSize: 40 }} /> </span>
-                        </div>
-                        <div className="ml-auto" >
-                        <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <TelegramIcon className="text-gray-400" style={{ fontSize: 40 }} />  </span>
-                        </div>
-                    </div>
-
-                </div> 
-                <div className="slice grid grid-cols-3 ">
-                    <div className="admin max-[499px]:pl-2 min-[500px]:pl-10 py-3 ">
-                        <img className="min-[500px]:inline w-16" src={admin} alt="Not found "/>
-                        <span className="text-center  min-[500px]:ml-4 text-gray-400">Eman</span>
-                    </div>
-                    <div className="flex py-7 pr-8 justify-evenly col-span-2 ">
-                        <div className="ml-auto">
-                    <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <AutorenewIcon  className="text-gray-400" style={{ fontSize: 40 }} /> </span>
-                        </div>
-                        <div className="ml-auto" >
-                        <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <TelegramIcon className="text-gray-400" style={{ fontSize: 40 }} />  </span>
-                        </div>
-                    </div>
-
-                </div> 
-                <div className="slice grid grid-cols-3 ">
-                    <div className="admin max-[499px]:pl-2 min-[500px]:pl-10 py-3 ">
-                        <img className="min-[500px]:inline w-16" src={admin} alt="Not found "/>
-                        <span className="text-center  min-[500px]:ml-4 text-gray-400">Eman</span>
-                    </div>
-                    <div className="flex py-7 pr-8 justify-evenly col-span-2 ">
-                        <div className="ml-auto">
-                    <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <AutorenewIcon  className="text-gray-400" style={{ fontSize: 40 }} /> </span>
-                        </div>
-                        <div className="ml-auto" >
-                        <span className="inlin-block bg-white shadow rounded-md py-4 px-2 "> <TelegramIcon className="text-gray-400" style={{ fontSize: 40 }} />  </span>
-                        </div>
-                    </div>
-
-                </div> 
+              {data.data.$values.map((notify)=> <div key={notify.$id} className="slice grid grid-cols-3">
+             <NavLink to='/notificationDetail'> <div  >
+             <div className="admin max-[499px]:pl-2 min-[500px]:pl-10 py-3 ">
+               
+                 <h1>{notify.message}</h1>
+                 <span>{notify.createdAt}</span>
+                {status? <h1>{status}</h1>:''}
+               
+             </div>
+         </div></NavLink> 
+           <div className="flex py-7 pr-8 justify-evenly col-span-2 ">
+                 <div className="ml-auto">
+           <button onClick={()=>{handleAccepted(notify.$id)}} className='rounded-full bg-green-600 text-white px-4 py-1 hover:bg-green-700 text-lg'>Accept</button>
+                 </div>
+                 <div className="ml-auto" >
+             <button onClick={()=>{handleRejected(notify.$id)}} className='rounded-full text-lg text-red-600 bg-white border border-black px-4 py-1 hover:bg-red-500 hover:text-white hover:border-none'>Reject</button>
+                 </div>
+             </div></div>)}
                 
                 </div>
                 

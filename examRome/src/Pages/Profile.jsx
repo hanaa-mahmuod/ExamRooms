@@ -1,55 +1,158 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from '@mui/material/IconButton';
 import admin from"../assets/admin.png"
+import Loading from '../Components/Loading';
+import { useQuery } from '@tanstack/react-query';
 import "../styles/editProfile.css"
 import * as Yup from "yup";
+import axios from 'axios'
+import { useState } from 'react';
 import { useFormik } from "formik";
+import { useContext } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-const Profile = () => {
-    const formik=useFormik({
-        initialValues:{
-            firstName:"",
-            lastName:"",
-            email:"",
-            phonNumber:"",
-            password:"",
-            confirmPassword:""
+import toast, { Toaster } from 'react-hot-toast';
+import { AUth } from '../Context/UserIdProvider';
+import { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 
-        },
-        validationSchema:Yup.object().shape({
-            firstName:Yup.string()
-            .required("firstName is Requierd")
-            .min(3,"Must be more than 3 characters"),
-            lastName:Yup.string()
-            .required("lastName is Requierd")
-            .min(3,"Must be more than 3 characters"),
-            email:Yup.string()
-            .required("Email Requierd")
-            .email("Invalid Email"),
-            phonNumber:Yup.string()
-            .required("phoneNumber is requierd")
-            .min(11,"Must not be less than 11 number"),
-            password:Yup.string()
-            .min(6,"Must not be less than 6 char")
-            .required("Password is requierd"),
-            confirmPassword:Yup.string()
-            .required("Confirm password require")
-            .oneOf([Yup.ref("password"),""],"Password confirmation must match password")
-        }),
-        onSubmit:(values)=>{
-            console.log("supmited form")
-            console.log({values});
+const Profile = () => {
+ const [selectedImage, setSelectedImage] = useState(null);
+ const [userPhoto, setUserPhoto] = useState(null);
+
+const {setUserID,UserID}=useContext(AUth);
+const EditProfileForm =useFormik({
+    initialValues:{
+        userID:UserID,
+        userFName: '',
+        userLName:'',
+        userEmail:'',
+        userPhone: '',
+        userPassword:'',
+       
+
+    },
+    validationSchema:Yup.object({
+        userFName:Yup.string()
+        .required("firstName is Requierd")
+        .min(3,"Must be more than 3 characters"),
+        userLName:Yup.string()
+        .required("lastName is Requierd")
+        .min(3,"Must be more than 3 characters"),
+        userEmail:Yup.string()
+        .required("Email Requierd")
+        .email("Invalid Email"),
+        userPhone:Yup.string()
+        .required("phoneNumber is requierd")
+        .min(9,"Must not be less than 11 number"),
+        userPassword:Yup.string()
+        .min(6,"Must not be less than 6 char")
+        .required("Password is requierd"),
+       
+    }),
+    onSubmit:function(values){
+       console.log('values',values)
+        axios.put('https://localhost:7290/api/Profile/EditProfile',values, // Pass `values` as the second argument
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+            }
+          })
+        .then(function(X){
+            toast.success(X.data.message);
+          console.log('true',X)
+
+        })
+        .catch(function(X){
+            toast.error('failed to update profile')
+          console.log('false',X);
+        })
+        
+      },
+})
+function getUserProfile(){
+    
+    return axios.get(`https://localhost:7290/api/Profile/Profile`,{ headers: {
+      'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+    }});
+  } 
+  const {data,isError,isLoading}=useQuery({
+    queryKey: ['userProfile', UserID],
+    queryFn:getUserProfile,
+
+  });
+  useEffect(() => {
+    if (data) {
+        console.log(data.data.userPhoto);
+        setUserPhoto(data.data.userPhoto); 
+      EditProfileForm.setValues({
+        userID:UserID,
+        userFName: data?.data?.userFName || '',
+        userLName: data?.data?.userLName || '',
+        userEmail: data?.data?.userEmail || '',
+        userPhone: data?.data?.userPhone || '',
+        userPassword:data?.data?.userPassword ||  '',
+      
+      });
+    }
+  }, [data]);
+if(isLoading){
+   return <Loading></Loading>
+}
+if(isError)
+{console.log('error')
+   return<h1>errror</h1>
+}
+
+
+   
+  
+    // Function to handle file input change
+    const handleImageChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setSelectedImage(file);
+      }
+    };
+    const handleUpload = async () => {
+        if (!selectedImage) {
+         toast('Please select an image first!')
+          return;
         }
-    })
+      
+        const formData = new FormData();
+        formData.append("userPhoto", selectedImage);
+      
+        try {
+          const response = await fetch(`https://localhost:7290/api/Profile/EditPhoto/${UserID}`, {
+            method: "PUT",
+            body: formData,
+            
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+              }
+            }
+          );
+      
+          if (response.ok) {
+           toast.success('Photo uploaded successfully!')
+          } else {
+             toast.error('failed in Photo uploaded successfully!')
+          }
+        } catch (error) {
+          toast.error('failed in Photo uploaded successfully!')
+          console.error("Error uploading photo:", error);
+        }
+      };
+      
 
     return (
         <div className="prof-main ">
             
-            <div className="edit-content pt-5">
+            <div className="edit-content pt-5 px-[50px]" >
                 <div className="head   flex justify-end mr-10">
                 <NotificationsOutlinedIcon className="text-gray-400 items-center  mr-4" style={{ fontSize: 40 }} />
-                    <img className="w-12" src={admin}/>
+                <img className="w-12" src={userPhoto ? `https://localhost:7290${userPhoto}` : admin} alt="User Photo" />
                 </div>
                 <div className="path pt-5 pl-2 ">
                 <div className=" flex" >
@@ -65,96 +168,104 @@ const Profile = () => {
                     </span>
                 </div>
                 </div>
-                <div className="edit w-3/4 relative  pt-20">
-                    <div className="img_edit mb-10 flex absolute right-2 top-0 ">
-                        <div className="absolute bg-gray-300 right-[90%] text-white -bottom-1"> <EditOutlinedIcon style={{ fontSize: 30}} /></div>
-                        <img className="w-28" src={admin} alt="Not Found"/>
+              
+   
+
+                <div className="edit w-3/4 relative  ">
+                    <div className="img_edit mb-10 absolute lg:right-[-200px] top-0   ">
+                       
+                    <input type="file" accept="image/*" onChange={handleImageChange} />
+      {selectedImage && (
+        <div>
+          <img
+            src={URL.createObjectURL(selectedImage)}
+            alt="Selected"
+            style={{ width: "80px", height: "80px", marginTop: "10px" }}
+          />
+        </div>
+      )}
+      <button onClick={handleUpload}> <EditOutlinedIcon></EditOutlinedIcon>Upload Photo</button>
                     </div>
                     <div className="from  w-4/5">
-                        <form className='frm'>
+
+
+                        <form className='frm' onSubmit={EditProfileForm.handleSubmit}>
                         <div className="flex">
                         <div className="lb ">
-                            <label htmlFor="firstname">First Name</label>
+                            <label htmlFor="userFName">First Name</label>
                             <input className="inp"
-                            placeholder="First Name"
+                            
                                 type="text"
-                                name="firstName"
-                                id="firstname"
-                                value={formik.values.firstName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
+                                name="userFName"
+                                id="userFName"
+                                value={EditProfileForm.values.userFName}
+                                onChange={EditProfileForm.handleChange}
+                                onBlur={EditProfileForm.handleBlur}
+                               
                             />
-                            {(formik.errors.firstName && formik.touched.firstName) && <div className="err">{formik.errors.firstName}</div>}
+                            {(EditProfileForm.errors.userFName && EditProfileForm.touched.userFName) && <div className="err">{EditProfileForm.errors.userFName}</div>}
                         </div>
                         <div className="lb ml-2">
-                            <label htmlFor="lastname">Last Name</label>
+                            <label htmlFor="userLName">Last Name</label>
                             <input className="inp"
-                                placeholder="Last Name"
+                                
                                 type="text"
-                                name="lastName"
-                                id="lastname"
-                                value={formik.values.lastName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
+                                name="userLName"
+                                id="userLName"
+                                value={EditProfileForm.values.userLName}
+                                onChange={EditProfileForm.handleChange}
+                                onBlur={EditProfileForm.handleBlur}
+                               
                             />
-                            {(formik.errors.lastName && formik.touched.lastName) && <div className="err">{formik.errors.lastName}</div>}
+                            {(EditProfileForm.errors.userLName && EditProfileForm.touched.userLName) && <div className="err">{EditProfileForm.errors.userLName}</div>}
                         </div>
                     </div>
                     <div className="lb">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="userEmail">Email</label>
                         <input className="inp"
-                        placeholder="Email"
+                      
                             type="email"
-                            name="email"
-                            id="email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
+                            name="userEmail"
+                            id="userEmail"
+                            value={EditProfileForm.values.userEmail}
+                            onChange={EditProfileForm.handleChange}
+                            onBlur={EditProfileForm.handleBlur}
+                           
                         />
-                        {(formik.errors.email && formik.touched.email) && <div className="err">{formik.errors.email}</div>}
+                        {(EditProfileForm.errors.userEmail && EditProfileForm.touched.userEmail) && <div className="err">{EditProfileForm.errors.userEmail}</div>}
                     </div>
                     <div className="lb">
-                        <label htmlFor="phNumber">Phone Number</label>
+                        <label htmlFor="userPhone">Phone Number</label>
                         <input className="inp w-3/4"
-                        placeholder="Phone Number"
+                      
                             type="text"
-                            name="phonNumber"
-                            id="phNumber"
-                            value={formik.values.phonNumber}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
+                            name="userPhone"
+                            id="userPhone"
+                            value={EditProfileForm.values.userPhone}
+                            onChange={EditProfileForm.handleChange}
+                            onBlur={EditProfileForm.handleBlur}
+                            
                         />
-                        {(formik.errors.phonNumber && formik.touched.phonNumber) && <div className="err">{formik.errors.phonNumber}</div>}
+                        {(EditProfileForm.errors.userPhone && EditProfileForm.touched.userPhone) && <div className="err">{EditProfileForm.errors.userPhone}</div>}
                     </div>
                     <div className="lb">
-                        <label htmlFor="pass">password</label>
+                        <label htmlFor="userPassword">password</label>
                         <input className="inp"
-                        placeholder="Password"
+                   
                             type="password"
-                            name="password"
-                            id="pass"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
+                            name="userPassword"
+                            id="userPassword"
+                            value={EditProfileForm.values.userPassword}
+                            onChange={EditProfileForm.handleChange}
+                            onBlur={EditProfileForm.handleBlur}
+                            
                         />
-                        {(formik.errors.password && formik.touched.password) && <div className="err">{formik.errors.password}</div>}
+                        {(EditProfileForm.errors.userPassword && EditProfileForm.touched.userPassword) && <div className="err">{EditProfileForm.errors.userPassword}</div>}
                     </div>
-                    <div className="lb">
-                        <label htmlFor="cpass">Confirm Password</label>
-                        <input className="inp w-3/4"
-                        placeholder="Confirm Password"
-                            type="password"
-                            name="confirmPassword"
-                            id="cpass"
-                            value={formik.values.confirmPassword}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                        {(formik.errors.confirmPassword && formik.touched.confirmPassword) && <div className="err">{formik.errors.confirmPassword}</div>}
-                    </div>
+                   
                     <div className="flex max-[515px]:translate-x-10  absolute mt-5 -right-1">
-                    <button  className="but   bg-[#FFFFFF]">Cancel</button>
-                    <button type="submit" className="but w-48 bg-primary">Save Changes</button>
+                   <NavLink to='/home'> <button  className="but   bg-red-300 hover:bg-red-400 ">Cancel</button></NavLink>
+                    <button type="submit" className="but w-48 bg-[#febc6e] hover:bg-[#fda53b]">Save Changes</button>
                     </div>
                         </form>
                     </div>
@@ -164,6 +275,7 @@ const Profile = () => {
             
         </div>
     );
+
 }
 
 export default Profile;
