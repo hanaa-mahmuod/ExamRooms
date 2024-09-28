@@ -19,12 +19,12 @@ const AddExamRoom = () => {
     });
     try {
       const response = await fetch(
-        `https://localhost:5001/api/ExamRooms/CreateExamRoom?${queryParams.toString()}`,
+        `https://localhost:7290/api/ExamRooms/CreateExamRoom?${queryParams.toString()}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMTEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtYWhtdWRuYWdpQGdtYWlsLmNvbSIsImV4cCI6MTcyNzI2NTUyMywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo3MjkwLyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzI5MCJ9.BdgJCBUQV8eO-nqYNW5WdRt3PhPEoTFFpwUFb_lJOQc"
+             'Authorization': `Bearer ${localStorage.getItem('tkn')}`
 
           },
           body:JSON.stringify({
@@ -59,7 +59,7 @@ const AddExamRoom = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center  bg-gray-100 w-scren">
       <div className="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-lg">
         <h2 className="text-3xl font-bold mb-6 text-center text-yellow-500">Create Exam Room</h2>
         <form onSubmit={handleSubmit}>

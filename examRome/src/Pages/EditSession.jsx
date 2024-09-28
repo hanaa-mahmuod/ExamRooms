@@ -4,6 +4,8 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useFormik } from 'formik';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../Components/Loading';
@@ -11,9 +13,11 @@ import axios from 'axios'
 import * as Yup from 'yup';
 import { useState } from 'react';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-export default function Session() {
+import DeleteIcon from '@mui/icons-material/Delete';
+import toast from 'react-hot-toast';
+export default function EditSession () {
   const navigate=useNavigate();
-  const {examRoomID,numberOfSessions}=useParams();
+  const {sessionID}=useParams();
   const [loading, setLoading] = useState(false);
   
  
@@ -22,12 +26,13 @@ export default function Session() {
       sessionName:'',
       startTime:'',
       endTime:'',
-      capacity:''
+      capacity:'',
+      observerEmail:''
 
     },
     onSubmit:function(values){
       setLoading(true);
-      axios.post(`https://localhost:7290/api/Sessions/Create?examRoomId=${examRoomID}&numberOfSessions=${numberOfSessions}`,values, {
+      axios.put(`https://localhost:7290/api/Sessions/Edit/${sessionID}`,values, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('tkn')}`
         }
@@ -36,7 +41,7 @@ export default function Session() {
        
         console.log('true',X)
       
-      
+      toast.success('session updated successfully')
         navigate(-1);
         
       })
@@ -69,6 +74,9 @@ export default function Session() {
         }),
     
       sessionName: Yup.string().required('Session name is required'),
+      observerEmail:Yup.string()
+      .required("Email Requierd")
+      .email("Invalid Email"),
     
       capacity: Yup.number()
         .required('Capacity is required')
@@ -80,10 +88,55 @@ export default function Session() {
 
 
    })
+   function getSessionDetail(){
+    
+    return axios.get(`https://localhost:7290/api/Sessions/Edit/${sessionID}`,{ headers: {
+      'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+    }});
+  } 
+  const {data,isError,isLoading}=useQuery({
+    queryKey: ['sessionDetail', sessionID],
+    queryFn:getSessionDetail,
+
+  });
+  useEffect(() => {
+    if (data) {
+       
+        console.log('data',data.data.session.observerEmail)
+      sessionForm.setValues({
+      
+        sessionName: data?.data?.session.sessionName || '',
+        startTime: data?.data?.session.startTime.slice(0, 16) || '',
+        endTime: data?.data?.session.endTime.slice(0, 16) || '',
+        capacity: data?.data?.session.capacity || '',
+       observerEmail: data?.data?.session.observerEmail || '',
+       
+      });
+    }
+  }, [data]);
+if(isLoading){
+   return <Loading></Loading>
+}
+if(isError)
+{console.log('error')
+   return<h1>seesion was deleted</h1>
+}
 
    if(loading)
     {
      return <Loading></Loading>
+    }
+   async function deleteSession(){
+    await axios.delete(`https://localhost:7290/api/Sessions/Delete/${sessionID}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('tkn')}`
+        }
+      }).then((res)=>{console.log(res); 
+        toast.success('session deleteted successfully')
+        navigate(-1)
+    })
+      .catch((error)=>{console.log(error) ;toast.error(`${error}`)})
+
     }
   
   return (
@@ -132,9 +185,17 @@ export default function Session() {
           <input type="datetime-local" name='endTime' value={sessionForm.values.endTime} onChange={sessionForm.handleChange}  onBlur={sessionForm.handleBlur} className="w-full bg-white p-2 rounded-lg border focus:ring-2 focus:ring-yellow-500" />
           {(sessionForm.errors.endTime && sessionForm.touched.endTime) && <div className="err">{sessionForm.errors.endTime}</div>}
         </div>
+
+        
       </div>
+      
     </div>
   <hr />
+  <div className="flex  items-center w-[300px]">
+      <label className="block text-sm font-semibold mb-1 me-8 ">ObserverEmail</label>
+          <input type="text" name='observerEmail' value={sessionForm.values.observerEmail} onChange={sessionForm.handleChange}  onBlur={sessionForm.handleBlur} className="w-full bg-white p-2 rounded-lg border focus:ring-2 focus:ring-yellow-500" />
+          {(sessionForm.errors.observerEmail && sessionForm.touched.observerEmail) && <div className="err">{sessionForm.errors.observerEmail}</div>}
+        </div>
     {/* <div className="space-y-4">
       <div className="flex space-x-4 items-center">
         <span>• Observers</span>
@@ -152,11 +213,14 @@ export default function Session() {
     </div>
    */}
     <div className="flex items-center mt-6 space-x-4 lg:translate-x-[800px] ">
-      {/* <button className="bg-yellow-500 px-4 py-2 rounded-lg text-white"><EditIcon></EditIcon>Edit</button>  */}
-       <button  type='submit' className="bg-yellow-500 px-4 py-2 rounded-lg text-white"><SaveIcon></SaveIcon>Save</button> 
+      <button type='submit' className="bg-yellow-500 px-4 py-2 rounded-lg text-white"><EditIcon></EditIcon>Edit</button> 
+     
+       
        <button onClick={()=>{navigate(-1)}} className="bg-red-500 px-4 py-2 rounded-lg text-white">Cancel</button>
+       
     </div>
     </form>
+    <button onClick={()=>{deleteSession()}}  className="bg-red-500 px-4 py-2 rounded-lg text-white"><DeleteIcon></DeleteIcon>Delete</button> 
     
   </div></div>
     </div>

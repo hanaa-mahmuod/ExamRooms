@@ -19,11 +19,11 @@ const CreateFolder = () => {
             await (parentId ==='null')&& await setParentId('');
             console.log("parent",parentId);
            
-            const response = await fetch(`https://localhost:5001/api/Folders/CreateFolder?id=${ parentId ||''}`, {
+            const response = await fetch(`https://localhost:7290/api/Folders/CreateFolder?id=${ parentId ||''}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMTEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtYWhtdWRuYWdpQGdtYWlsLmNvbSIsImV4cCI6MTcyNzI2NTUyMywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo3MjkwLyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzI5MCJ9.BdgJCBUQV8eO-nqYNW5WdRt3PhPEoTFFpwUFb_lJOQc"
+                     'Authorization': `Bearer ${localStorage.getItem('tkn')}`
                 },
                 body: JSON.stringify({
                     folderName,
@@ -55,7 +55,7 @@ const CreateFolder = () => {
     };
 
     return (
-        <div>
+        <div className="w-screen">
             <form onSubmit={handelCreate}>
                 <input
                     className="block"

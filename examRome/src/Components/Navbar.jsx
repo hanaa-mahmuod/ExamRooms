@@ -45,21 +45,23 @@ useEffect(() => {
     unreadNotification();
   }, []);
     return (<>
-        <div onClick={()=>{handelClick()}} className={ `${click?" bg-primary max-[700px]:left-1/2 left-[40%] ":" bg-primary "}bg-primary rounded-full p-3   min-[956px]:hidden fixed z-50 top-1/2 transition-transform duration-900 ease-in-out `}>{click?<ChevronRightIcon style={{ color: 'black', fontSize: 30 }}/>:<ChevronLeftIcon style={{ color: 'black', fontSize: 30 }}/>}</div>
-        <div className={`${click?"max-[955px]:-translate-x-4  max-[700px]:w-3/4 w-1/2 z-40 fixed ":"max-[955px]:-translate-x-80 w-0 "} Main border-r-2 duration-700 ease-in-out min-[956px]:w-1/4 `} >
-            <div className="side-bar  max-[500px]:ml-5">
+        {/* <div onClick={()=>{handelClick()}} className={ `${click?" bg-primary max-[700px]:left-1/2 left-[40%] ":" bg-primary "}bg-primary rounded-full p-3   min-[956px]:hidden fixed z-50 top-1/2 transition-transform duration-900 ease-in-out `}>{click?<ChevronRightIcon style={{ color: 'black', fontSize: 30 }}/>:<ChevronLeftIcon style={{ color: 'black', fontSize: 30 }}/>}</div>
+        <div className={`${click?"max-[955px]:-translate-x-4  max-[700px]:w-3/4 w-1/2 z-40 fixed ":"max-[955px]:-translate-x-80 w-0 "} Main border-r-2 duration-700 ease-in-out min-[956px]:w-1/4 `} > */}
+           <div className='bg-white'>
+           <div className="side-bar   w-full ml-7 px-5 ">
             <div className="Logo pt-2">
                 <img src={Logo} alt="Logo" />
             </div>
             <div className="icons max-[550px]:mt-10 mt-16">
                 <ul className="list">
                 <li>
-                <Link to="home">
-                    <HomeOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
+                <Link to="folders">
+                
+                    <MeetingRoomOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
                     <span>Home</span>
                 </Link>
-                
                 </li>
+                
                 <li>
                     <Link to="profile">
                     <AccountCircleOutlinedIcon  className="text-[#263238]" style={{ fontSize: 30 }} />
@@ -69,25 +71,14 @@ useEffect(() => {
                 <li>
                     <Link to="notifications"><NotificationsOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
                     <span>Notifications</span></Link>
-                 {unreadNotificationCount?<span className= 'inline-block bg-[#FEC88799] py-1 px-3 font-poppins font-thin rounded-full translate-x-10'>{unreadNotificationCount}</span>:''}   
+                 {unreadNotificationCount?<span className= 'inline-block bg-[#FEC88799] py-1 px-3 font-poppins  rounded-full translate-x-1 text-sm font-bold'>{unreadNotificationCount}</span>:''}   
                 </li>
-                <li>
-                <Link to="folders">
-                
-                    <MeetingRoomOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
-                    <span>Folders</span>
-                </Link>
-                </li>
-                <li>
-                    <Link to="notes">
-                    <NotesOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
-                    <span>Notes</span>
-                    </Link>
-                </li>
+               
+              
                 <li>
                     <ChatOutlinedIcon className="text-[#263238]" style={{ fontSize: 30 }} />
                     <span>Chat</span>
-                    <span className= 'inline-block bg-[#FEC88799] py-1 px-3 font-poppins font-thin rounded-full translate-x-10'>4</span>
+                    <span className= 'inline-block bg-[#FEC88799] py-1 px-3 font-poppins  rounded-full translate-x-1 text-sm font-bold'>4</span>
                     
                 </li>
                 <li onClick={logout}>
@@ -98,7 +89,8 @@ useEffect(() => {
                 </ul>
             </div>
             </div>
-        </div>
+           </div>
+        {/* </div> */}
     
         </> );
         

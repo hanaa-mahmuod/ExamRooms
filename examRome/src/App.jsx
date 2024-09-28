@@ -5,8 +5,9 @@ import Notifications from "./Pages/Notification"
 import { Routes,Route, useLocation } from "react-router-dom"
 import FolderDetails from './Pages/FolderDetails';
 import Navbar from "./Components/Navbar";
-import Home from "./Pages/Home"
+
 import LogIn from "./Pages/Auth/LogIn"
+
 import { Toaster } from "react-hot-toast"
 import {
   useQuery,
@@ -16,7 +17,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import UserIdProvider from './Context/UserIdProvider'
-import NotificationDetail from "./Pages/NotificationDetail"
+
 import Session from "./Pages/Session"
 
 import CreateFolder from "./Pages/CreateFolder"
@@ -28,6 +29,7 @@ import AddNoteToExamRoom from "./Pages/AddNoteToExamRoom"
 import Notes from "./Pages/Notes"
 import ExamRoomNotes from "./Pages/ExamRoomNotes"
 import SharedFolders from "./Pages/SharedFolders"
+import EditSession from "./Pages/EditSession"
 const queryClient = new QueryClient()
 function App() {
   
@@ -48,9 +50,11 @@ const showside = !(location.pathname === '/' || location.pathname === '/Login');
         <Route path="/profile" element={<Profile/> }/>
        
         <Route path="/Login" element={<LogIn/>}/>
-        <Route path="home" element={<Home/>}/>
-        <Route path="notificationDetail" element={<NotificationDetail/>}/>
-        <Route path="/session" element={<Session/>}/>
+        
+       
+        
+        <Route path="/session/:examRoomID/:numberOfSessions" element={<Session/>}/>
+
         <Route path="folders/folder/:folderId" element={<FolderDetails/> }/>
         <Route path="room/details/:roomId" element={<ExamRoomDetails/>}/>
         <Route path="folders/createfolder/:folderId" element={<CreateFolder/> }/>
@@ -59,7 +63,8 @@ const showside = !(location.pathname === '/' || location.pathname === '/Login');
         <Route path="EditRoom/:roomId" element={<EditExamRoom/> }/>
         <Route path="addNote/:roomId/" element={<AddNoteToExamRoom/> }/>
         <Route path="login" element={<LogIn/>}/>
-        <Route path="home" element={<Home/>}/>
+       
+        <Route path="/EditSession/:sessionID" element={<EditSession/>}/>
         <Route path="notes" element={<Notes/>}/>
         <Route path="roomNotes/:roomId" element={<ExamRoomNotes/>}/>
         <Route path="folders/sharedFolder" element={<SharedFolders/>}/>

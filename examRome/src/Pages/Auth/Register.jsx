@@ -2,101 +2,119 @@ import "../../styles/register.css";
 import Logo from "../../assets/examRooms_logo.png";
 import sign from"../../assets/signup_img.png"
 import {Toast} from"../../Sweetalert"
+import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 import LogIn from './LogIn';
 const Register = () => {
     const navigate =useNavigate()
     const formik=useFormik({
         initialValues:{
-            firstName:"",
-            lastName:"",
-            email:"",
-            phonNumber:"",
-            password:"",
-            confirmPassword:""
+            userFName:"",
+            userLName:"",
+            userEmail:"",
+            userPhone:"",
+            userPassword:"",
+            userConfPassword:""
 
         },
         validationSchema:Yup.object().shape({
-            firstName:Yup.string()
+            userFName:Yup.string()
             .required("firstName is Requierd")
             .min(3,"Must be more than 3 characters"),
-            lastName:Yup.string()
+            userLName:Yup.string()
             .required("lastName is Requierd")
             .min(3,"Must be more than 3 characters"),
-            email:Yup.string()
+            userEmail:Yup.string()
             .required("Email Requierd")
             .email("Invalid Email"),
-            phonNumber:Yup.string()
+            userPhone:Yup.string()
             .required("phoneNumber is requierd")
             .min(11,"Must not be less than 11 number"),
-            password:Yup.string()
+            userPassword:Yup.string()
             .min(8,"Must not be less than 6 char")
             .required("Password is requierd")
             .matches(/[a-zA-Z]/, "Password must contain letters")
             .matches(/[0-9]/, "Password must contain numbers")
             .matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, "Password must contain special characters"),
-            confirmPassword:Yup.string()
+            userConfPassword:Yup.string()
             .required("Confirm password require")
-            .oneOf([Yup.ref("password"),""],"Password confirmation must match password")
+            .oneOf([Yup.ref("userPassword"),""],"Password confirmation must match password")
         }),
-        onSubmit:async(values)=>{
-            try{
-                const response =await fetch("https://localhost:7290/api/Registration",{
-                    method:"Post",
-                    headers:{
-                        "Content-Type":"application/json"
-                    },
-                    body: JSON.stringify({
-                        userFName: values.firstName,
-                        userLName: values.lastName,
-                        userEmail: values.email,
-                        userPhone: values.phonNumber,
-                        userPassword: values.password,
-                        userConfPassword: values.confirmPassword
-                    })
-                });
-                if(response.ok){
+        onSubmit:
+        function(values){
+            console.log('values',values)
+             axios.post('https://localhost:7290/api/Registration',values, // Pass `values` as the second argument
+              )
+             .then(function(X){
+                 toast.success(X.data.message);
+               console.log('true',X)
+     
+             })
+             .catch(function(X){
+                 toast.error('failed to update profile')
+               console.log('false',X);
+             })
+             
+           },
+        // async(values)=>{
+        //     try{
+        //         const response =await fetch("https://localhost:7290/api/Registration",{
+        //             method:"Post",
+        //             headers:{
+        //                 "Content-Type":"application/json"
+        //             },
+        //             body: JSON.stringify({
+        //                 userFName: values.userFName,
+        //                 userLName: values.userLName,
+        //                 userEmail: values.userEmail,
+        //                 userPhone: values.userPhone,
+        //                 userPassword: values.userPassword,
+        //                 userConfPassword: values.userConfPassword
+        //             })
+        //         });
+        //         if(response.ok){
                  
-                    const data = await response.json();
-                    Toast.fire({
-                        icon: "success",
-                        title: "Registration Success",
-                        text: responseData.message
-                    });
-                    navigate("/login");
-                    } else {
-                    // إذا كانت الاستجابة بها خطأ
-                    if (response.status === 409) {
-                        // التعامل مع خطأ تعارض (البريد الإلكتروني موجود بالفعل)
-                        formik.setErrors({
-                        email: responseData.message
-                        });
-                        Toast.fire({
-                        icon: "error",
-                        title: "Registration Failed",
-                        text: responseData.message
-                        });
-                    } else {
-                        Toast.fire({
-                        icon: "error",
-                        title: "Registration Failed",
-                        text: responseData.message || "An error occurred during registration."
-                        });
-                    }
-                    console.error("RRRegistration failed:", responseData);
-                    }
-                } catch (err) {
-                    console.error("Network error:", err);
-                    Toast.fire({
-                    icon: "error",
-                    title: "Registration Failed",
-                    text: "Network error occurred. Please try again later."
-                    });
-                }
-            }
+        //             const data = await response.json();
+        //             Toast.fire({
+        //                 icon: "success",
+        //                 title: "Registration Success",
+        //                 text: data.message
+        //             });
+        //             navigate("/login");
+        //             } else {
+        //             // إذا كانت الاستجابة بها خطأ
+        //             if (response.status === 409) {
+        //                 // التعامل مع خطأ تعارض (البريد الإلكتروني موجود بالفعل)
+        //                 formik.setErrors({
+        //                 email: data.message
+        //                 });
+        //                 Toast.fire({
+        //                 icon: "error",
+        //                 title: "Registration Failed",
+        //                 text: data.message
+        //                 });
+        //             } else {
+        //                 Toast.fire({
+        //                 icon: "error",
+        //                 title: "Registration Failed",
+        //                 text: data.message || "An error occurred during registration."
+        //                 });
+        //             }
+        //             console.error("RRRegistration failed:", data);
+        //             }
+        //         } catch (err) {
+        //             console.error("Network error:", err);
+        //             Toast.fire({
+        //             icon: "error",
+        //             title: "Registration Failed",
+        //             text: "Network error occurred. Please try again later."
+        //             });
+        //         }
+        //     }
     })
 
     
@@ -120,26 +138,26 @@ const Register = () => {
                             <input className="inp"
                             placeholder="First Name"
                                 type="text"
-                                name="firstName"
+                                name="userFName"
                                 id="firstname"
-                                value={formik.values.firstName}
+                                value={formik.values.userFName}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                             />
-                            {(formik.errors.firstName && formik.touched.firstName) && <div className="err">{formik.errors.firstName}</div>}
+                            {(formik.errors.firstName && formik.touched.userFName) && <div className="err">{formik.errors.userFName}</div>}
                         </div>
                         <div className="lb ml-2">
                             <label htmlFor="lastname">Last Name</label>
                             <input className="inp"
                                 placeholder="Last Name"
                                 type="text"
-                                name="lastName"
+                                name="userLName"
                                 id="lastname"
-                                value={formik.values.lastName}
+                                value={formik.values.userLName}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                             />
-                            {(formik.errors.lastName && formik.touched.lastName) && <div className="err">{formik.errors.lastName}</div>}
+                            {(formik.errors.userLName && formik.touched.userLName) && <div className="err">{formik.errors.userLName}</div>}
                         </div>
                     </div>
                     <div className="lb">
@@ -147,52 +165,52 @@ const Register = () => {
                         <input className="inp"
                         placeholder="Email"
                             type="email"
-                            name="email"
+                            name="userEmail"
                             id="email"
-                            value={formik.values.email}
+                            value={formik.values.userEmail}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        {(formik.errors.email && formik.touched.email) && <div className="err">{formik.errors.email}</div>}
+                        {(formik.errors.userEmail && formik.touched.userEmail) && <div className="err">{formik.errors.userEmail}</div>}
                     </div>
                     <div className="lb">
                         <label htmlFor="phNumber">Phone Number</label>
                         <input className="inp"
                         placeholder="Phone Number"
                             type="text"
-                            name="phonNumber"
+                            name="userPhone"
                             id="phNumber"
-                            value={formik.values.phonNumber}
+                            value={formik.values.userPhone}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        {(formik.errors.phonNumber && formik.touched.phonNumber) && <div className="err">{formik.errors.phonNumber}</div>}
+                        {(formik.errors.userPhone && formik.touched.userPhone) && <div className="err">{formik.errors.userPhone}</div>}
                     </div>
                     <div className="lb">
                         <label htmlFor="pass">password</label>
                         <input className="inp"
                         placeholder="Password"
                             type="password"
-                            name="password"
+                            name="userPassword"
                             id="pass"
-                            value={formik.values.password}
+                            value={formik.values.userPassword}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        {(formik.errors.password && formik.touched.password) && <div className="err">{formik.errors.password}</div>}
+                        {(formik.errors.userPassword && formik.touched.userPassword) && <div className="err">{formik.errors.userPassword}</div>}
                     </div>
                     <div className="lb">
                         <label htmlFor="cpass">Confirm Password</label>
                         <input className="inp"
                         placeholder="Confirm Password"
                             type="password"
-                            name="confirmPassword"
+                            name="userConfPassword"
                             id="cpass"
-                            value={formik.values.confirmPassword}
+                            value={formik.values.userConfPassword}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        {(formik.errors.confirmPassword && formik.touched.confirmPassword) && <div className="err">{formik.errors.confirmPassword}</div>}
+                        {(formik.errors.userConfPassword && formik.touched.userConfPassword) && <div className="err">{formik.errors.userConfPassword}</div>}
                     </div>
                     <button type="submit" className="btn mb-5">Sign up</button>
                     <div><h1>Do You Have Account? <NavLink to='/Login'><span className="font-bold text-[#FEC887]">Login Now!</span></NavLink></h1></div>

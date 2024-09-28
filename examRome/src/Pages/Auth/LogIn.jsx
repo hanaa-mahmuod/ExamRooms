@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import { NavLink } from 'react-router-dom';
 import Loading from '../../Components/Loading';
 import { useNavigate } from 'react-router-dom';
+
 export default function LogIn() {
   const navigate=useNavigate();
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,7 @@ export default function LogIn() {
             localStorage.setItem('userId',X.data.userId);
             localStorage.setItem('tkn',X.data.token);
             setAaccept(true);
-            navigate('/home')
+            navigate('/Folders')
             
           })
           .catch(function(X){

@@ -50,7 +50,8 @@ const EditProfileForm =useFormik({
         .required("Password is requierd"),
        
     }),
-    onSubmit:function(values){
+    onSubmit:
+    function(values){
        console.log('values',values)
         axios.put('https://localhost:7290/api/Profile/EditProfile',values, // Pass `values` as the second argument
           {

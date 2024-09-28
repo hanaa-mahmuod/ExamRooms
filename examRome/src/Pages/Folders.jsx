@@ -33,7 +33,7 @@ const goBack = () => {
     navigate(-1); // إرجاع المستخدم خطوة للوراء
 };
     return (
-        <div className="main">
+        <div className="main w-screen   ">
             <div className="room_content pt-2 ">
             <div className="head  flex justify-end mr-10">
                 <NotificationsOutlinedIcon className="text-gray-400 items-center  mr-4" style={{ fontSize: 40 }} />

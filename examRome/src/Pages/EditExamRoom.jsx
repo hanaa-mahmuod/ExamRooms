@@ -28,12 +28,11 @@
         // }).toString();
 
         try {
-        const response = await fetch(`https://localhost:5001/api/ExamRooms/Edit/${param.roomId}`, {
+        const response = await fetch(`https://localhost:7290/api/ExamRooms/Edit/${param.roomId}`, {
             method: 'PUT',
             headers: {
             'Content-Type': 'application/json',
-            "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMTEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtYWhtdWRuYWdpQGdtYWlsLmNvbSIsImV4cCI6MTcyNzI2NTUyMywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo3MjkwLyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzI5MCJ9.BdgJCBUQV8eO-nqYNW5WdRt3PhPEoTFFpwUFb_lJOQc"
-
+              'Authorization': `Bearer ${localStorage.getItem('tkn')}`
             },
             body:JSON.stringify({
                 roomName: roomData.roomName,
@@ -61,7 +60,7 @@
     };
 
     return (
-        <div className='bg-[#F6F2EB] lg:px-[200px]'>
+        <div className='bg-[#F6F2EB] lg:px-[200px] w-screen'>
         <div className="flex items-center">
             <div className="w-full p-10 space-y-6">
             {/* Header */}

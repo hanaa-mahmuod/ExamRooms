@@ -13,7 +13,8 @@ import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 const Notifications= () => {
-  const [status, setstatus] = useState(null)
+  const [status, setStatus] = useState({});
+  // const [status, setstatus] = useState(null)
         function getAllNotification(){
         return axios.get(`https://localhost:7290/api/Notifications/Notifications`,{ headers: {
             'Authorization': `Bearer ${localStorage.getItem('tkn')}`
@@ -43,11 +44,11 @@ const Notifications= () => {
       })
        .then((res)=>{console.log('response',res)
         toast.success(`${res.data.message}`)
-        setstatus('Accepted');
+        setStatus((prev) => ({ ...prev, [notifyID]: 'Accepted' }))
        }
     )
        .catch((err)=>{console.log(err)
-        toast.error(`${err.message}`)
+        toast.error(`session was deleted`)
        })
      }
     async function handleRejected(notifyID){
@@ -58,11 +59,11 @@ const Notifications= () => {
       })
        .then((res)=>{console.log('response',res)
         toast.success(`${res.data.message}`)
-        setstatus('Rejected');
+        setStatus((prev) => ({ ...prev, [notifyID]: 'Rejected' }));
        }
     )
        .catch((err)=>{console.log(err)
-        toast.error(`${err.message}`)
+        toast.error(`session was deleted`)
        })
      }
     return (
@@ -92,15 +93,15 @@ const Notifications= () => {
                 </div> */}
                 <div className="Notifications max-[955px]:mx-auto mt-20">
               {data.data.$values.map((notify)=> <div key={notify.$id} className="slice grid grid-cols-3">
-             <NavLink to='/notificationDetail'> <div  >
+              <div  >
              <div className="admin max-[499px]:pl-2 min-[500px]:pl-10 py-3 ">
                
                  <h1>{notify.message}</h1>
                  <span>{notify.createdAt}</span>
-                {status? <h1>{status}</h1>:''}
+                 {status[notify.$id] && <h1>{status[notify.$id]}</h1>}
                
              </div>
-         </div></NavLink> 
+         </div>
            <div className="flex py-7 pr-8 justify-evenly col-span-2 ">
                  <div className="ml-auto">
            <button onClick={()=>{handleAccepted(notify.$id)}} className='rounded-full bg-green-600 text-white px-4 py-1 hover:bg-green-700 text-lg'>Accept</button>
